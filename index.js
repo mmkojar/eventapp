@@ -13,11 +13,10 @@ const { store, persistor } = factory();
 // export const Main = () => {
         
   /*   PushNotification.configure({
-
+ 
         onRegister: function (token) {
             // console.log("onRegister:", token);
         },
-        
         onNotification: function(notification) {
         //   console.log('onNotification ==>', notification)
         },
