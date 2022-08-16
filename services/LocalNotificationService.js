@@ -1,5 +1,5 @@
 import PushNotification from "react-native-push-notification"
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
+// import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 class LocalNotificationService { 
     configure = (onOpenNotification) => {
@@ -16,7 +16,7 @@ class LocalNotificationService {
                 onOpenNotification(notification);
 
                  // (required) Called when a remote is received or opened, or local notification is opened
-                notification.finish(PushNotificationIOS.FetchResult.NoData);
+                // notification.finish(PushNotificationIOS.FetchResult.NoData);
             },
             // IOS ONLY (optional): default: all - Permissions to register.
             permissions: {
