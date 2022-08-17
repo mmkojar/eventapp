@@ -1,5 +1,6 @@
 import PushNotification from "react-native-push-notification"
-// import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import { Platform } from "react-native";
 
 class LocalNotificationService { 
     configure = (onOpenNotification) => {
@@ -16,7 +17,7 @@ class LocalNotificationService {
                 onOpenNotification(notification);
 
                  // (required) Called when a remote is received or opened, or local notification is opened
-                // notification.finish(PushNotificationIOS.FetchResult.NoData);
+                notification.finish(PushNotificationIOS.FetchResult.NoData);
             },
             // IOS ONLY (optional): default: all - Permissions to register.
             permissions: {
@@ -61,6 +62,8 @@ class LocalNotificationService {
     }
 
     showNotification = (title, message, data = {}, options = {}) => {
+
+        //For Android
         PushNotification.localNotification({
             /* Android Only Properties */
             ...this.buildAndroidNotification(title, message, data, options),
@@ -70,8 +73,10 @@ class LocalNotificationService {
             playSound : options.playSound || true,
             soundName : options.soundName || 'default',
             userInteraction : true , // BOOLEAN : If notification was opened by the user from notification
-            badge : true, 
-        });
+            badge : true,             
+            picture:'https://i.pinimg.com/originals/a1/47/29/a14729422f50f6c13e835572982b58e2.jpg',
+            userInfo: data, 
+        });          
     }
 
     buildAndroidNotification = ( title, message, data = {}, options = {}) => {

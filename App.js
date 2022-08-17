@@ -1,4 +1,5 @@
 import React,{Fragment,useEffect} from 'react';
+import { Platform, View, Text, TouchableOpacity } from 'react-native';
 import { configureFonts, DefaultTheme ,Provider as PaperProvider,withTheme } from 'react-native-paper';
 import Nav from './components/Nav';
 import Spinner from './components/utils/Spinner';
@@ -8,23 +9,24 @@ import { navigationRef,navigate } from './services/RootNavigation';
 // import { onOpenNotification, createLocalNotification } from './services/NotificationService';
 import { localNotificationService } from './services/LocalNotificationService';
 import { fcmService } from './services/FCMService';
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 const fontConfig = {
   web: {
     regular: {
-      fontFamily: 'VarelaRound-Regular',
+      fontFamily: Platform.OS == 'ios' ?  'FontAwesome' : 'VarelaRound-Regular',
       fontWeight: 'normal',
     }
   },
   ios: {
     regular: {
-      fontFamily: 'VarelaRound-Regular',
+      fontFamily: Platform.OS == 'ios' ?  'FontAwesome' : 'VarelaRound-Regular',
       fontWeight: 'normal',
     }
   },
   android: {
     regular: {
-      fontFamily: 'VarelaRound-Regular',
+      fontFamily: Platform.OS == 'ios' ?  'FontAwesome' : 'VarelaRound-Regular',
       fontWeight: 'normal',
     }
   }
@@ -47,7 +49,7 @@ const App = () => {
   useEffect(() => {   
     // onOpenNotification();
     // createLocalNotification();
-    fcmService.registerAppWithFCM();
+    // fcmService.registerAppWithFCM();
     fcmService.register(onRegister,onNotification,onOpenNotification)
     localNotificationService.configure(onOpenNotification);
     // console.log(localNotificationService.getAllChannels());
@@ -68,9 +70,23 @@ const App = () => {
       options,
     )
   }
+  
+  const showIOSNotify = () => {
+    localNotificationService.showNotification(
+      'ios',
+      'Test Notify From IOS',
+      {
+        type:'message',
+        sender_id:'3',
+        sender_name:'Mohamemd mac'
+      },
+      {},
+    )    
+  }
 
   const onOpenNotification = async (notify) => {
     // check for auth    
+    console.log("notify:",notify);
     if(notify.data.type=="message") {
       if(notify.userInteraction == true) {
         navigate('ChatBox', {
@@ -82,31 +98,16 @@ const App = () => {
     }
   }
 
-  /* const createLocalNotification = () => {
-    
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      // console.log('Message handled in the background!', remoteMessage);
-    });
-    
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      
-      PushNotification.cancelAllLocalNotifications();
-      
-      // console.log("remoteMessage:",JSON.stringify(remoteMessage));
-      
-      PushNotification.localNotification({
-        channelId: "eventapp-id",
-        title:remoteMessage.notification.title,
-        message:remoteMessage.notification.body
-      });
-    });
-    return unsubscribe;
-  } */
-
   return (    
     <PaperProvider theme={theme}>
       <Fragment>
         <Nav color={theme.colors.primary} refer={navigationRef}/>
+        
+            <TouchableOpacity onPress={showIOSNotify}>
+            <View>
+              <Text style={{textAlign:'center',marginBottom:50}}>Click Me</Text>
+            </View>        
+            </TouchableOpacity>
         <Spinner/>
       </Fragment>
     </PaperProvider>

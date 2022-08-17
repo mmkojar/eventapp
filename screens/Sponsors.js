@@ -3,7 +3,7 @@ import { WebView } from 'react-native-webview';
 
 function Sponsors() {
     return (
-       <WebView source={{ uri: 'http://vsss2.info2ideas.com/sponsors' }} />
+       <WebView source={{ uri: 'https://google.com' }} />
     )
 }
 

@@ -160,7 +160,7 @@ function Home({ navigation }) {
 }
 
 const width = Dimensions.get('window').width;
-console.log(width);
+
 const styles = StyleSheet.create({
     container:{
         flex:1,
