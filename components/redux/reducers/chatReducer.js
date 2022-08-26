@@ -1,7 +1,8 @@
-import { ADD_CHATS, GET_CHATS } from "../actions/type";
+import { ADD_CHATS, GET_CHATS, GET_USER_CHATS } from "../actions/type";
 
 const initialState = {
-    data:null,    
+    data:null,
+    chathistory:null
 }
 
 export default function (state=initialState,action) {
@@ -14,6 +15,11 @@ export default function (state=initialState,action) {
         case ADD_CHATS:
             return {                
                 data:[...action.payload, ...state.data]
+            };
+        case GET_USER_CHATS:
+            return {
+                ...state,
+                chathistory:action.payload
             };
         default:
             return state;

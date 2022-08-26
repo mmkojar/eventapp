@@ -1,91 +1,61 @@
-import React,{ useEffect, useState } from 'react'
-import { View, Text, Dimensions } from "react-native";
-import RNPoll from "react-native-poll";
-import RNAnimated from "react-native-animated-component";
+import React,{ useEffect } from 'react'
+import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, Pressable } from "react-native";
+import { Card, IconButton, withTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getPollsList } from '../components/redux/actions/delegateActions';
 
 const { width: ScreenWidth } = Dimensions.get("window");
 
-const Polling = () => {
+const Polling = ({ navigation }) => {
 
     const dispatch = useDispatch();
-    const result = useSelector((state) => state.delegate);
-
-    const [choices, setChoices] = useState([])
-    const [voted, setVoted] = useState('');
-
+    const pollslist = useSelector((state) => state.delegate.polls);  
+    const authData = useSelector((state) => state.auth);
    
     useEffect(() => {
-        setChoices(result.polls);
-        getData();
-        
+        dispatch(getPollsList());        
         return () => {
 
-        }
-    }, [dispatch,getData])
+        } 
+    }, [dispatch])
 
-    console.log("voted:", voted);
-
-    const getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('choice')
-            if(value !== null) {
-                setVoted(value);
-            }
-          } catch(e) {
-            console.log(e);
-          }
-    }
-
-    const handlePollSubmit = async (res) => {
-        // console.log(res.id);
-       
-        try {
-            await AsyncStorage.setItem('choice',res.id);
-          } catch (e) {
-            // saving error
-          }
+    const pressHandler = (id) => {
+      /* navigation.navigate('PollView', {
+        
+      }); */
     }
 
     return (
-        <View style={{flex:1, marginHorizontal:10}}>
-          <Text
-            style={{
-              marginTop: 32,
-              fontSize: 20,
-              fontFamily: "SuezOne-Regular",
-            }}
-          >
-            What is your favorite sport brand?
-          </Text>
-          <View
-            style={{
-              width: ScreenWidth * 0.9,
-            }}
-           >
-            <RNPoll
-              appearFrom="top"
-            //   hasBeenVoted={voted !== null ? true : false}
-            //   votedChoiceByID={voted}
-              totalVotes={10}
-              animationDuration={750}
-              choices={choices}
-              PollContainer={RNAnimated}
-              PollItemContainer={RNAnimated}
-              choiceTextStyle={{
-                fontFamily: "SuezOne-Regular",
-              }}
-              onChoicePress={(selectedChoice) => 
-                {
-                    handlePollSubmit(selectedChoice);
-                    console.log("SelectedChoice: ", selectedChoice)
-                }
-              }
-            />
+          <View style={{flex:1,margin:16}}>
+            <Text style={{fontSize:18,marginBottom:10}}>Select Poll to Vote</Text>
+            <FlatList
+              keyExtractor={(item) => item.id}            
+              data={pollslist}
+              renderItem={({item}) => (
+                  <Pressable  onPress={() => pressHandler(item.id)}>
+                      <Text style={styles.title}>   
+                        {item.title}
+                      </Text>
+                  </Pressable >
+              )}
+            ></FlatList>
+            
           </View>
-        </View>
     )
 }
 
-export default Polling
+const styles = StyleSheet.create({
+  title : {
+      marginVertical:4,
+      fontSize: 18,
+      borderStyle:'solid',
+      borderColor:'#f1efea',
+      borderWidth:2,
+      padding:10,
+      fontFamily:'VarelaRound-Regular',
+      // width: ScreenWidth * 0.9,
+      borderRadius:10
+  }
+})
+
+export default withTheme(Polling)

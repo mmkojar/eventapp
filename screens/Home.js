@@ -86,14 +86,16 @@ function Home({ navigation }) {
                             <Text style={styles.textMain}>Sponsors</Text>
                         </Card>
                     </Pressable>
-                    <Card style={styles.innerItem} >
-                        <Image
-                            style={styles.image}
-                            source={require('../assets/Icons/6.png')}
-                        >
-                        </Image>
-                        <Text style={styles.textMain}>Chat</Text>
-                    </Card>
+                    <Pressable onPress={() => navigation.navigate('ChatList')}> 
+                        <Card style={styles.innerItem} >
+                            <Image
+                                style={styles.image}
+                                source={require('../assets/Icons/6.png')}
+                            >
+                            </Image>
+                            <Text style={styles.textMain}>Chat</Text>
+                        </Card>
+                    </Pressable>
                     <Pressable onPress={() => navigation.navigate('Gallery')}> 
                         <Card style={styles.innerItem} >
                             <Image

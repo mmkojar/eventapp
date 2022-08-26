@@ -3,13 +3,9 @@ import { Platform, View, Text, TouchableOpacity } from 'react-native';
 import { configureFonts, DefaultTheme ,Provider as PaperProvider,withTheme } from 'react-native-paper';
 import Nav from './components/Nav';
 import Spinner from './components/utils/Spinner';
-// import messaging from '@react-native-firebase/messaging';
-// import PushNotification from 'react-native-push-notification'
 import { navigationRef,navigate } from './services/RootNavigation';
-// import { onOpenNotification, createLocalNotification } from './services/NotificationService';
 import { localNotificationService } from './services/LocalNotificationService';
 import { fcmService } from './services/FCMService';
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 const fontConfig = {
   web: {
@@ -46,10 +42,8 @@ const theme = {
 
 const App = () => {
 
-  useEffect(() => {   
-    // onOpenNotification();
-    // createLocalNotification();
-    // fcmService.registerAppWithFCM();
+  useEffect(() => {
+    fcmService.registerAppWithFCM();
     fcmService.register(onRegister,onNotification,onOpenNotification)
     localNotificationService.configure(onOpenNotification);
     // console.log(localNotificationService.getAllChannels());

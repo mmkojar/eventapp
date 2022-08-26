@@ -7,6 +7,7 @@ import ProfileScreen from '../screens/Profile';
 import AttendeeProfile from '../screens/AttendeeProfile';
 import DelegatesScreen from '../screens/Delegates';
 import ChatBoxScreen from '../screens/ChatBox';
+import ChatListScreen from '../screens/ChatList';
 import EventOverviewScreen from '../screens/Event_overview';
 import AgendaScreen from '../screens/Agenda';
 import SpeakersScreen from '../screens/Speakers';
@@ -60,6 +61,10 @@ const Nav = ({color, refer}) => {
                 title:'Attendee Profile',                   
                 }} />
             <Stack.Screen name="ChatBox" component={ChatBoxScreen} />
+            <Stack.Screen name="ChatList" component={ChatListScreen} 
+                options={{
+                title:'Chats',                   
+                }}/>
             <Stack.Screen name="EventOverview" component={EventOverviewScreen} 
               options={{
                title:'Event Overview',                   

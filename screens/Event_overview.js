@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useEffect, useState} from 'react'
 // import { WebView } from 'react-native-webview';
 import {  View,StyleSheet,FlatList } from 'react-native';
 import { Card,Title,Paragraph } from 'react-native-paper';
@@ -8,13 +8,17 @@ import { getAboutEvent } from '../components/redux/actions/delegateActions';
 const Event_overview = () => {
 
     const dispatch = useDispatch();
-    const result = useSelector((state) => state.delegate);
-    const { about } = result;
 
     useEffect(() => {  
         dispatch(getAboutEvent());
     }, [dispatch])
-
+    
+    const [about,setAbout] = useState();
+    const result = useSelector((state) => state.delegate.about);
+    useEffect(() => {          
+        setAbout(result);
+    }, [])
+    
     return (
         <View style={styles.container}>
             <FlatList

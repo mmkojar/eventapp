@@ -4,7 +4,7 @@ import { Card,IconButton,withTheme } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllDelegates } from '../components/redux/actions/delegateActions';
 
-const delegates = ({ navigation,theme }) => {
+const Delegates = ({ navigation,theme }) => {
 
     const dispatch = useDispatch();
     const delglist = useSelector((state) => state.delegate.delegates);
@@ -37,7 +37,7 @@ const delegates = ({ navigation,theme }) => {
         <View style={styles.Main}>
             <FlatList
             keyExtractor={(item) => item.id}            
-            data={delegates}
+            data={delegates && delegates}
             renderItem={({item}) => (
                 <Pressable  onPress={() => pressHandler(item)}>
                     <Card style={styles.card} elevation={2}>
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default withTheme(delegates)
+export default withTheme(Delegates)

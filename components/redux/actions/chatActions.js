@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { 
-    START_LOADER, STOP_LOADER, GET_CHATS, ADD_CHATS, ERROR
+    START_LOADER, STOP_LOADER, GET_CHATS, GET_USER_CHATS, ADD_CHATS, ERROR
 } from './type';
 import Config from '../../utils/Config';
 
@@ -46,6 +46,39 @@ export const getAllChats = (userid,receiver_id) => (dispatch) => {
     });    
 }
 
+// ------Get Chats History------
+export const getChatHistory = (userid) => (dispatch) => {
+
+    dispatch({
+        type: START_LOADER,
+    }); 
+    const formdata = JSON.stringify({"user_id":userid})
+    
+    axios.post(api_url+'chat/chat_history', formdata ,config)
+    .then((res) => {
+        if(res.data.status === "true") {
+            dispatch({
+                type: GET_USER_CHATS,
+                payload: res.data.data,
+            });
+        }
+        else {
+            dispatch({
+                type: GET_USER_CHATS,
+                payload: [],
+            });
+        }       
+        dispatch({
+            type: STOP_LOADER,
+        });    
+    })
+    .catch((err) => {
+        dispatch({
+            type: STOP_LOADER,
+        });
+        alert(err);
+    });    
+}
 
 // ------Add Chats Action------
 export const sendMessage = (user_id,receiver_id,message) => (dispatch) => {
