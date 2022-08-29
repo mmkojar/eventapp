@@ -1,6 +1,6 @@
 import { 
     GET_ABOUT_EVENT, GET_SPEAKERS, GET_AGENDA, GET_DELEGATES, 
-    GET_POLLS, UPDATE_POLLS, CLEAR_DATA, ERROR 
+    GET_POLLS, UPDATE_POLLS, CLEAR_DATA, ERROR, GET_POLL 
 } from '../actions/type';
 
 const initialState = {
@@ -9,6 +9,7 @@ const initialState = {
     agenda:null,
     delegates: null,
     polls:null,
+    poll:null,
 };
 
 export default function (state = initialState, action) {
@@ -38,6 +39,11 @@ export default function (state = initialState, action) {
                 ...state,
                 polls:action.payload,
             };
+        case GET_POLL:
+            return {
+                ...state,
+                poll:action.payload,
+            };    
         case UPDATE_POLLS:
             return {
                 ...state

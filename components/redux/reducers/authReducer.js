@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
         case GET_USER:
             return {
                 ...state,
-                isAuthenticated: true,                
+                isAuthenticated: true,
                 user:action.payload,
             };
         case AUTH_ERROR:

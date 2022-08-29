@@ -1,4 +1,5 @@
 import React,{useEffect} from 'react';
+import { useSelector } from 'react-redux';
 import { NavigationContainer  } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/Home';
@@ -16,8 +17,8 @@ import NotificationScreen from '../screens/Notifications';
 import GalleryScreen from '../screens/Gallery';
 import FAQScreen from '../screens/FAQ';
 import SupportScreen from '../screens/Support';
-import { useSelector } from 'react-redux';
-import Polling from '../screens/Polling';
+import PollsScreen from '../screens/Polling';
+import PollViewScreen from '../screens/PollView';
 import ScanQR from '../screens/ScanQR';
 
 const Stack = createStackNavigator();
@@ -76,7 +77,8 @@ const Nav = ({color, refer}) => {
             <Stack.Screen name="Notification" component={NotificationScreen} />
             <Stack.Screen name="FAQ" component={FAQScreen} />
             <Stack.Screen name="Support" component={SupportScreen} />
-            <Stack.Screen name="Polling" component={Polling} />
+            <Stack.Screen name="Polling" component={PollsScreen} />
+            <Stack.Screen name="PollView" component={PollViewScreen} />
             <Stack.Screen name="QRScan" component={ScanQR} 
             options={{
                 title:'QR Scan',                   

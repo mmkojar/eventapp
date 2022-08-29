@@ -96,7 +96,7 @@ export const sendMessage = (user_id,receiver_id,message) => (dispatch) => {
             });
             // dispatch(getAllChats(user_id,receiver_id))
         }
-        if(res.data.status === "false") {        
+        else {
             dispatch({
                 type: ADD_CHATS,
                 payload: [],

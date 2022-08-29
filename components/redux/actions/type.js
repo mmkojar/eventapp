@@ -14,6 +14,7 @@ export const GET_CHATS = 'GET_CHATS';
 export const GET_USER_CHATS = 'GET_USER_CHATS';
 export const ADD_CHATS = 'ADD_CHATS';
 export const GET_POLLS = 'GET_POLLS';
+export const GET_POLL = 'GET_POLL';
 export const UPDATE_POLLS = 'UPDATE_POLLS';
 export const SCAN_QR = 'SCAN_QR';
 export const ERROR = 'ERROR';

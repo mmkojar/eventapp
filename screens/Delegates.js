@@ -9,14 +9,12 @@ const Delegates = ({ navigation,theme }) => {
     const dispatch = useDispatch();
     const delglist = useSelector((state) => state.delegate.delegates);
     const authData = useSelector((state) => state.auth);
-    const [delegates, setDelegates] = useState([]);
 
     useEffect(() => {
         dispatch(getAllDelegates());
-        setDelegates(delglist && delglist.filter((item) => item.id !== authData.data.user_id))
+        
     }, [dispatch])
         
-    
     const [referesing,setReferesing] = useState(false);
     const onReferesh = () => {
         setReferesing(true)
@@ -37,7 +35,7 @@ const Delegates = ({ navigation,theme }) => {
         <View style={styles.Main}>
             <FlatList
             keyExtractor={(item) => item.id}            
-            data={delegates && delegates}
+            data={delglist && delglist.filter((item) => item.id !== authData.data.user_id)}
             renderItem={({item}) => (
                 <Pressable  onPress={() => pressHandler(item)}>
                     <Card style={styles.card} elevation={2}>

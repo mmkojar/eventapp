@@ -1,101 +1,124 @@
 import React,{ useEffect, useState } from 'react'
-import { View, Text, Dimensions } from "react-native";
-import RNPoll from "react-native-poll";
-import RNAnimated from "react-native-animated-component";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { getPolls, updatePolls } from '../components/redux/actions/delegateActions';
+import { getPollView, updatePolls } from '../components/redux/actions/delegateActions';
 import axios from 'axios';
 import Config from '../components/utils/Config';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const { width: ScreenWidth } = Dimensions.get("window");
-
-const PollView = () => {
+const PollView = ({ route }) => {
 
     const dispatch = useDispatch();
-    const pollslist = useSelector((state) => state.delegate.polls);  
+     
     const authData = useSelector((state) => state.auth);
-    const [totalVotes, setTotalVotes] = useState('');
-    const [beenVoted, setBeenVoted] = useState('false');
     const [choiceById, setChoiceById] = useState('');
-   
-    useEffect(() => {
-        setTotalVotes(pollslist.map((item) => item.votes).reduce((total,count)=>total+count,0)) 
-        dispatch(getPolls());
+    const pollview = useSelector((state) => state.delegate.poll);
 
-        const formdata = new FormData();
-        // formdata.append('pid','1')
-        formdata.append('user_id',authData.data.user_id)
-       
-        axios.post(Config.api_url+'polling/checkUserVote', formdata ,{
+    useEffect(() => {
+        dispatch(getPollView(route.params.poll_id));
+        checkVote(route.params.poll_id);
+                 
+        return () => {
+        } 
+    }, [dispatch])    
+        
+    const handlePollSubmit = (res) => {
+      console.log("submit:",res)
+      dispatch(updatePolls(res.pid,res.paid,authData.data.user_id));
+      checkVote(route.params.poll_id);
+    }  
+
+    const checkVote = (pid) => {
+      
+      const formdata = new FormData();
+      formdata.append('pid',pid)
+      formdata.append('user_id',authData.data.user_id)
+      console.log(pid);
+      axios.post(Config.api_url+'polling/checkUserVote', formdata ,{
           headers: { 
               "Access-Control-Allow-Origin": "*",
               'encryptedd':'api-token'
           }
-        })
-        .then((res) => {
-            // console.log(res.data.data);
-            if(res && res.data.status == 'true') {
-              setBeenVoted('true');
-              setChoiceById(parseInt(res.data.data.poll_answer_id));
-            }
-            else {
-              setBeenVoted('false');
-              setChoiceById('');
-            }              
-        })
-        .catch((err) => {
-            alert(err);
-        });
-
-        return () => {
-
-        } 
-    }, [dispatch,setBeenVoted,setChoiceById])
-
-    console.log("choiid:",beenVoted);
-
-    const handlePollSubmit = (res) => {
-      console.log("POLL:", res);
-      dispatch(updatePolls(res.poll_id,res.id,authData.data.user_id));
-    }
+      })
+      .then((res) => {          
+          console.log("cvote:",res.data);
+          if(res.data && res.data.status === 'true') {
+            setChoiceById(res.data.data.poll_answer_id);
+          }
+          else {
+            setChoiceById('');
+          }
+      })
+      .catch((err) => {
+          alert(err);
+      });
+    }        
     
     return (
-        <View style={{flex:1, marginHorizontal:10}}>
+        <View style={{flex:1, marginVertical:20,marginHorizontal:10}}>
           <Text
             style={{
-              marginTop: 32,
+              marginBottom: 20,
               fontSize: 20,
-              fontFamily: "FontAwesome",
+              fontFamily: "VarelaRound-Regular",
             }}
           >
-            What is your favorite sport brand?
+            {pollview && pollview[0].title}
           </Text>
-          <View
-            style={{
-              width: ScreenWidth * 0.9,
-            }}
-           >
-            <RNPoll
-              appearFrom="top"
-              totalVotes={totalVotes && totalVotes}
-              choices={pollslist && pollslist}
-              hasBeenVoted={beenVoted}
-              votedChoiceByID={choiceById && choiceById}
-              animationDuration={750}
-              PollContainer={RNAnimated}
-              PollItemContainer={RNAnimated}
-              choiceTextStyle={{
-                fontFamily: "FontAwesome",
-              }}
-              onChoicePress={(selectedChoice) => 
-                {
-                    handlePollSubmit(selectedChoice);
-                }
-              }
-            />
+          <View>                
+             <FlatList
+              keyExtractor={(item) => item.paid}            
+              data={pollview && pollview}
+              renderItem={({item}) => (
+                <View>
+                  <Text>{item.choice} ({item.votes})</Text>
+                  <Pressable onPress={() => handlePollSubmit(item)} disabled={(choiceById && choiceById) ? true : false}>
+                  {
+                    (item.votes > 0) ?
+                    <View style={[styles.resultbar]}>
+                        <Text style={[styles.percent,{width:`${Math.round((item.votes/item.total_votes)*100)}%`}]}>
+                          {`${Math.round((item.votes/item.total_votes)*100)}%`}
+                          {
+                              (choiceById === item.paid) ? 
+                              <FontAwesome5
+                                name="check-circle"
+                                size={16}
+                                color="#000"
+                              />   
+                              : null
+                          }
+                        </Text>
+                    </View>
+                    : <View style={[styles.resultbar]}>
+                          
+                        <Text style={[styles.percent,{width:`${Math.round((item.votes/item.total_votes)*100)}%`}]}>0%</Text>
+                      </View>
+                  }        
+                  </Pressable>
+                </View>
+              )}
+            ></FlatList>            
           </View>
         </View>
+        
     )
 }
 
+const styles = StyleSheet.create({  
+  resultbar:{
+    marginVertical:8,
+    height:45,
+    borderColor:'#a1a1a1',
+    borderWidth:2,
+    borderRadius:8,
+  },
+  percent:{
+    minWidth:'7%',    
+    color:'#fff',
+    fontSize:16, 
+    lineHeight:45,
+    backgroundColor:'#a1a1a1',
+    textAlign:'center',
+  }
+})
 export default PollView

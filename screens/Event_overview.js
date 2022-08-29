@@ -13,17 +13,14 @@ const Event_overview = () => {
         dispatch(getAboutEvent());
     }, [dispatch])
     
-    const [about,setAbout] = useState();
-    const result = useSelector((state) => state.delegate.about);
-    useEffect(() => {          
-        setAbout(result);
-    }, [])
+    const aboutevent = useSelector((state) => state.delegate.about);
+    
     
     return (
         <View style={styles.container}>
             <FlatList
             keyExtractor={(item) => item.about_id}            
-            data={about}
+            data={aboutevent}
             renderItem={({item}) => (
                 <Card elevation={2} style={{margin:5}}>
                    <Card.Content>

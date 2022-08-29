@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { 
     START_LOADER, STOP_LOADER, GET_AGENDA,  GET_ABOUT_EVENT, 
-    GET_SPEAKERS,  GET_POLLS, UPDATE_POLLS, GET_DELEGATES
+    GET_SPEAKERS,  GET_POLLS, UPDATE_POLLS, GET_DELEGATES, GET_POLL
 } from './type';
 import Config from '../../utils/Config';
 
@@ -16,13 +16,13 @@ const config = {
 // ------Get Delegates Action------
 export const getAllDelegates = () => (dispatch) => {
 
-    fetchAxios(dispatch,'user/get',GET_DELEGATES); 
+    fetchAxios(dispatch,'user/get',GET_DELEGATES);
 }
 
 // ------About Event------
 export const getAboutEvent = () => (dispatch) => {
 
-    fetchAxios(dispatch,'aboust',GET_ABOUT_EVENT); 
+    fetchAxios(dispatch,'about',GET_ABOUT_EVENT); 
 }
 
 // ------Speakers------
@@ -40,13 +40,13 @@ export const getAgenda = () => (dispatch) => {
 // ------Polling------
 export const getPollsList = () => (dispatch) => {
 
-    fetchAxios(dispatch,'polling',GET_POLLS);
+    fetchAxios(dispatch,'polling/polls',GET_POLLS);
 }
 
 // ------Polling------
-export const getPollView = () => (dispatch) => {
+export const getPollView = (id) => (dispatch) => {
 
-    fetchAxios(dispatch,'polling',GET_POLLS);
+    fetchAxios(dispatch,`polling/polls/${id}`,GET_POLL);
 }
 
 export const updatePolls = (pid,paid,user_id) => (dispatch) => {
@@ -66,8 +66,9 @@ export const updatePolls = (pid,paid,user_id) => (dispatch) => {
                 type: UPDATE_POLLS,
                 payload: res.data.data,
             });
+            dispatch(getPollView(pid));
         }
-        if(res.data.status === "false") {
+        else {
             dispatch({
                 type: UPDATE_POLLS,
                 payload: [],
@@ -93,8 +94,8 @@ const fetchAxios = (dispatch,param,action) => {
     });
     axios.get(api_url+param+'/', config)
     .then((res) => {
-        console.log(res.data);
-        if(res.data.status === "true") {
+        // console.log("action:",res.data);
+        if(res.data && res.data.status === "true") {
             dispatch({
                 type: action,
                 payload: res.data.data,
@@ -106,17 +107,17 @@ const fetchAxios = (dispatch,param,action) => {
                 payload: [],
             });  
         }
-        if(res.data.status === "false") {
+        /* if(res.data.status === "false") {
             dispatch({
                 type: action,
                 payload: [],
             });    
-        }
+        } */
         dispatch({
             type: STOP_LOADER,
         });
     })
-    .catch((err) => {
+    .catch((err) => {        
         dispatch({
             type: STOP_LOADER,
         });

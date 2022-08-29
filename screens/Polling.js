@@ -10,7 +10,6 @@ const Polling = ({ navigation }) => {
 
     const dispatch = useDispatch();
     const pollslist = useSelector((state) => state.delegate.polls);  
-    const authData = useSelector((state) => state.auth);
    
     useEffect(() => {
         dispatch(getPollsList());        
@@ -20,16 +19,16 @@ const Polling = ({ navigation }) => {
     }, [dispatch])
 
     const pressHandler = (id) => {
-      /* navigation.navigate('PollView', {
-        
-      }); */
+      navigation.navigate('PollView', {
+        poll_id: id
+      });
     }
 
     return (
-          <View style={{flex:1,margin:16}}>
+          <View style={{flex:1,marginVertical:20,marginHorizontal:10}}>
             <Text style={{fontSize:18,marginBottom:10}}>Select Poll to Vote</Text>
             <FlatList
-              keyExtractor={(item) => item.id}            
+              keyExtractor={(item) => item.id}
               data={pollslist}
               renderItem={({item}) => (
                   <Pressable  onPress={() => pressHandler(item.id)}>
@@ -46,7 +45,7 @@ const Polling = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   title : {
-      marginVertical:4,
+      marginVertical:6,
       fontSize: 18,
       borderStyle:'solid',
       borderColor:'#f1efea',

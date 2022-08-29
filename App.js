@@ -1,4 +1,4 @@
-import React,{Fragment,useEffect} from 'react';
+import React,{Fragment,useEffect, useState} from 'react';
 import { Platform, View, Text, TouchableOpacity } from 'react-native';
 import { configureFonts, DefaultTheme ,Provider as PaperProvider,withTheme } from 'react-native-paper';
 import Nav from './components/Nav';
@@ -6,6 +6,10 @@ import Spinner from './components/utils/Spinner';
 import { navigationRef,navigate } from './services/RootNavigation';
 import { localNotificationService } from './services/LocalNotificationService';
 import { fcmService } from './services/FCMService';
+import axios from 'axios';
+import Config from './components/utils/Config';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from './components/redux/actions/authActions';
 
 const fontConfig = {
   web: {
@@ -46,11 +50,34 @@ const App = () => {
     fcmService.registerAppWithFCM();
     fcmService.register(onRegister,onNotification,onOpenNotification)
     localNotificationService.configure(onOpenNotification);
+    
     // console.log(localNotificationService.getAllChannels());
   }, []);
 
-  const onRegister = (token) => {}
+  const dispatch = useDispatch();
 
+  const onRegister = (token) => {
+    checkToken(token);
+  }
+
+  const checkToken = (token) => {
+    axios.get(Config.api_url+`user/checktoken/${token}`, {
+      headers: { 
+          "Access-Control-Allow-Origin": "*",
+          'encryptedd':'api-token'
+      }
+    })
+    .then((res) => {     
+        if(res && res.data.status == 'false') {
+          dispatch(logoutAction());
+          // alert('Token Expired!');
+        }
+    })
+    .catch((err) => {
+        alert(err);
+    });
+  }
+  
   const onNotification = (notify) => {
     const options = {
       soundName: 'default',
