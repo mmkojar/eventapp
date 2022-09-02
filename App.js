@@ -57,7 +57,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   const onRegister = (token) => {
-    checkToken(token);
+    // setInterval(() => {
+      checkToken(token);
+      console.log(token);
+    // }, 15000);
   }
 
   const checkToken = (token) => {

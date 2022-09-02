@@ -44,7 +44,7 @@ class FCMService {
     }
 
     requestPermission = (onRegister) => {
-        messaging().requestPermission()
+        messaging().requestPermission({provisional: true})
             .then(() => {
                 this.getToken(onRegister);
             }).catch(error => {

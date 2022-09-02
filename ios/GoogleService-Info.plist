@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>855345356432-4q0k56733dgmeec9g76a6mr20lo88ecq.apps.googleusercontent.com</string>
+	<string>855345356432-mmhnp243lnuorr81a77mi9u6f60ioquj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.855345356432-4q0k56733dgmeec9g76a6mr20lo88ecq</string>
+	<string>com.googleusercontent.apps.855345356432-mmhnp243lnuorr81a77mi9u6f60ioquj</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBuR_DNlMnAi1ZF5y4t4M5AhsWYGsNwm34</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>org.reactjs.native.example.EventApp</string>
+	<string>com.eventapp.main</string>
 	<key>PROJECT_ID</key>
 	<string>event-app-98e83</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:855345356432:ios:a87171bccb2b9397974215</string>
+	<string>1:855345356432:ios:ccd5f7c18b389535974215</string>
 </dict>
 </plist>
